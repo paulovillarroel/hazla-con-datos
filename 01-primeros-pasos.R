@@ -1,23 +1,30 @@
+# Instalar las librerías
 # install.packages("palmerpenguins")
 # install.packages("tidyverse")
 
+## Parte 1 ----
+
+# Cargar las librerías
 library(palmerpenguins)
 library(tidyverse)
 
 # Documentation https://dplyr.tidyverse.org/
+
+# Crear nuestro objeto de pinguinos
 
 # data(package = 'palmerpenguins')
 
 penguins_df <- palmerpenguins::penguins
 View(penguins_df)
 
+# Analizar la estructura de los datos
 glimpse(penguins_df)
 skimr::skim(penguins_df)
+
 
 # Data structures
 
 # Vectors
-
 penguins_vector <- penguins_df |> 
   pull(species)
 
@@ -38,6 +45,9 @@ penguins_df <- penguins_df |>
 penguins_list <- penguins_df |> 
   as.list()
 
+
+
+## Parte 2 ----
 
 # Data manipulation
 
