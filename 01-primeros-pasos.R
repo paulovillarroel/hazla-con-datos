@@ -49,20 +49,51 @@ penguins_list <- penguins_df |>
 
 ## Parte 2 ----
 
-# Data manipulation
+# library(dplyr)
+# Data manipulation with dplyr
+
+# Select
 
 penguins_mod <- penguins_df |> 
-  select(species, sex)
+  select(species, island, sex) # Select columns
+
+penguins_mod2 <- penguins_df |>
+  select(-species, -sex) # Remove columns
+
+penguins_mod3 <- penguins_df |>
+  select(-c(species, sex)) # Remove columns using a vector
+
+
+columns_to_select <- c("species", "island") # Create a vector with the columns to select
+
+penguins_mod4 <- penguins_df |> 
+  select(all_of(columns_to_select)) # Select using a vector
+
+penguins_mod5 <- penguins_df |>
+  select(any_of(columns_to_select))
 
 glimpse(penguins_mod)
 
+penguins_mod6 <- penguins_df |>
+  select(1, 7, 2) # select by position
+
+penguins_df |> 
+  head() # first rows
+
+penguins_df |> 
+  tail(1) # last row
+
+
+# Filter
 
 penguins_mod <- penguins_df |> 
   filter(sex == "female",
-         bill_length_mm <= 40)
+         bill_length_mm <= 40) 
 
 glimpse(penguins_mod)
 
+
+# Arrange
 
 penguins_mod <- penguins_df |> 
   arrange(bill_length_mm, desc(year))
@@ -70,11 +101,15 @@ penguins_mod <- penguins_df |>
 glimpse(penguins_mod)
 
 
+# Mutate
+
 penguins_mod <- penguins_df |> 
   mutate(body_mass_kg = body_mass_g / 1000)
 
 glimpse(penguins_mod)
 
+
+# Group by
 
 penguins_mod <- penguins_df |> 
   group_by(sex) |> 
@@ -82,6 +117,8 @@ penguins_mod <- penguins_df |>
 
 glimpse(penguins_mod)
 
+
+# All together
 
 penguins_mod <- penguins_df |> 
   select(sex, bill_length_mm, body_mass_g) |> 
