@@ -50,7 +50,6 @@ penguins_list <- penguins_df |>
 ## Parte 2 ----
 
 # library(dplyr)
-
 # Data manipulation with dplyr
 
 # Select
