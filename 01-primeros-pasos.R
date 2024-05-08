@@ -88,7 +88,27 @@ penguins_df |>
 
 penguins_mod <- penguins_df |> 
   filter(sex == "female",
-         bill_length_mm <= 40) 
+         bill_length_mm <= 40)
+
+penguins_mod <- penguins_df |> 
+  filter(sex == "female" |
+         bill_length_mm <= 40)
+
+
+sex_to_filter <- c("female", "male")
+
+penguins_df |>
+  filter(sex == sex_to_filter)
+
+penguins_na <- penguins_df |> 
+  filter(is.na(sex))
+
+penguins_wo_na <- penguins_df |> 
+  filter(!is.na(sex))
+
+penguins_df |> 
+  na.omit() |> View()
+
 
 glimpse(penguins_mod)
 
@@ -103,8 +123,22 @@ glimpse(penguins_mod)
 
 # Mutate
 
+penguins_df_na <- penguins_df |> 
+  mutate(sex_na = is.na(sex))
+
 penguins_mod <- penguins_df |> 
-  mutate(body_mass_kg = body_mass_g / 1000)
+  mutate(body_mass_kg = round(body_mass_g / 1000, 1))
+
+penguins_large <- penguins_df |> 
+  mutate(large = ifelse(flipper_length_mm > 200, "Large", "Normal"))
+
+penguins_large <- penguins_large |>
+  mutate(large = ifelse(large == "Large", "L", "N"))
+
+penguins_large2 <- penguins_df |>
+  mutate(large = ifelse(flipper_length_mm > 200, "Large", "Normal"),
+         large_short = ifelse(large == "Large", "L", "N"))
+
 
 glimpse(penguins_mod)
 
