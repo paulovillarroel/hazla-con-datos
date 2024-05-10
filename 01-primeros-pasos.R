@@ -66,6 +66,8 @@ penguins_mod3 <- penguins_df |>
 
 columns_to_select <- c("species", "island") # Create a vector with the columns to select
 
+# penguins_df <- penguins_df[, 2:8]
+
 penguins_mod4 <- penguins_df |> 
   select(all_of(columns_to_select)) # Select using a vector
 
@@ -73,6 +75,7 @@ penguins_mod5 <- penguins_df |>
   select(any_of(columns_to_select))
 
 glimpse(penguins_mod)
+
 
 penguins_mod6 <- penguins_df |>
   select(1, 7, 2) # select by position
@@ -140,29 +143,64 @@ penguins_large2 <- penguins_df |>
          large_short = ifelse(large == "Large", "L", "N"))
 
 
-glimpse(penguins_mod)
+# Slice
+
+penguins_df |> 
+  slice(1:10)
+
+penguins_df |> 
+  slice(1:10, 34:48)
+
+penguins_df |> 
+  slice(seq(1, 200, 12))
+
+penguins_df |>
+  slice_head(n = 5)
+
+penguins_df |>
+  slice_tail(n = 5)
+
+penguins_df |> 
+  slice_sample(n = 5)
+
+# sample_n(penguins_df, 5)
+
+penguins_df |>
+  slice_max(flipper_length_mm) # Can use n = 3 to get the top 3
+
+penguins_df |>
+  slice_min(flipper_length_mm)
+
+
+# Summarize
+
+resume_df <- penguins_df |> 
+  summarize(mean_mass_g = mean(body_mass_g, na.rm = TRUE),
+            sd_mass_g = sd(body_mass_g, na.rm = TRUE))
 
 
 # Group by
 
-penguins_mod <- penguins_df |> 
-  group_by(sex) |> 
-  summarize(mean_mass_g = mean(body_mass_g, na.rm = TRUE))
-
-glimpse(penguins_mod)
+penguins_df |> 
+  filter(!is.na(sex)) |> 
+  group_by(species, sex) |> 
+  summarize(n = n(), 
+            mean_mass_g = mean(body_mass_g, na.rm = TRUE),
+            sd_mass_g = sd(body_mass_g, na.rm = TRUE),
+            max_mass_g = max(body_mass_g, na.rm = TRUE),
+            p10_mass_g = quantile(body_mass_g, 0.1, na.rm = TRUE),
+            p50_mass_g = quantile(body_mass_g, 0.5, na.rm = TRUE),
+            median_mass_g = median(body_mass_g, na.rm = TRUE))
 
 
 # All together
 
-penguins_mod <- penguins_df |> 
+penguins_df |> 
   select(sex, bill_length_mm, body_mass_g) |> 
   filter(sex == "female",
          bill_length_mm > 30) |> 
   group_by(sex) |> 
   summarize(mean_mass_g = mean(body_mass_g, na.rm = TRUE))
-
-glimpse(penguins_mod)
-
 
 
 
@@ -170,14 +208,11 @@ gentoo <- penguins_df |>
   filter(species == "Gentoo") |> 
   select(species, bill_length_mm, sex)
 
-mean_length <- mean(gentoo$bill_length_mm, na.rm = TRUE)
-sd_length <- sd(gentoo$bill_length_mm, na.rm = TRUE)
+mean_length <- round(mean(gentoo$bill_length_mm, na.rm = TRUE), 1)
+sd_length <- round(sd(gentoo$bill_length_mm, na.rm = TRUE), 1)
 
-gentoo <- gentoo |> 
+gentoo_2 <- gentoo |> 
   mutate(long_short = case_when(bill_length_mm > mean_length + 2*sd_length ~ "long", 
                                 bill_length_mm < mean_length - 2*sd_length ~ "short",
                                 TRUE ~ "ordinary"))
 
-gentoo |> 
-  janitor::tabyl(long_short) |> 
-  janitor::adorn_pct_formatting(digits = 2)
