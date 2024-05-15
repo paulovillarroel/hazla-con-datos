@@ -8,7 +8,7 @@ library(tidyverse)
 # No confundir read_csv con read.csv / Son de librerías distintas. read_csv es de readr()
 
 
-read_csv(file.choose()) # Solo para casos muy especiles
+read_csv(file.choose()) # Solo para casos muy especiales
 
 covid_cases <- read_csv("example-data/casos_covid.csv") # Atencion a la codificación
 covid_cases <- read_csv("example-data/casos_covid.csv", locale = locale(encoding = "latin1")) # UTF-8
@@ -42,7 +42,7 @@ data.table::fread("example-data/casos_covid.csv", encoding = "Latin-1" ) |>
 
 library(rio)
 
-import("example-data/casos_covid.csv", encoding = "Latin-1") |> 
+rio::import("example-data/casos_covid.csv", encoding = "Latin-1") |> 
   View()
 
 
@@ -60,15 +60,17 @@ population <- read_xlsx("example-data/poblacion_comunas.xlsx")
 
 population <- read_excel("example-data/poblacion_comunas.xlsx")
 
-import("example-data/poblacion_comunas.xlsx")
+rio::import("example-data/poblacion_comunas.xlsx")
 
 
 # Muchas veces se incluyen títulos o logos en los excel
 population2 <- read_excel("example-data/poblacion_comunas2.xlsx", skip = 6)
 
-population2[, 1:3]
+tail(population2, 2) # Filas con NA´s
 
-population2 <- read_excel("example-data/poblacion_comunas2.xlsx", range = "D7:F369")
+population2[1:362, 1:3]
+
+population3 <- read_excel("example-data/poblacion_comunas2.xlsx", range = "D7:F369")
 
 
 read_excel("example-data/indice_movilidad.xlsx", sheet = 2) |> 
