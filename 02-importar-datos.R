@@ -1,4 +1,5 @@
 library(tidyverse)
+library(readxl)
 
 ## Desde un CSV
 
@@ -73,12 +74,14 @@ population2[1:362, 1:3]
 population3 <- read_excel("example-data/poblacion_comunas2.xlsx", range = "D7:F369")
 
 
-read_excel("example-data/indice_movilidad.xlsx", sheet = 2) |> 
-  View()
+df1 <- read_excel("example-data/indice_movilidad.xlsx", sheet = 2)
+
+path <- "example-data/indice_movilidad.xlsx"
+df2 <- read_excel(path, sheet = 3)
 
 # Para importar varias hojas de Excel de forma simultanea
 # Usaremos la función set_names() y map() de la librería PURRR (tidyverse)
-path <- "example-data/indice_movilidad.xlsx"
+
 
 path |> 
   excel_sheets()
