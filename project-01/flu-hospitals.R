@@ -24,7 +24,7 @@ flu_hospitals <- flu_hospitals |>
   filter(!(anio == 2024 & semana_estadistica == last(semana_estadistica)))
 
 
-ggplot(data = flu_hospitals, aes(x = semana_estadistica, y = casos, group = factor(anio), color = factor(anio))) +
+ggplot(data = flu_hospitals, aes(x = semana_estadistica, y = casos, color = factor(anio))) +
   geom_line(linewidth = 0.8) +
   scale_x_continuous(breaks = seq(min(flu_hospitals$semana_estadistica), max(flu_hospitals$semana_estadistica), by = 5)) +
   scale_color_manual(values = c(rep("#ced4da", times = length(unique(flu_hospitals$anio)) - 1), "#ff006e")) +
@@ -62,7 +62,7 @@ flu_hospitals_per_region <- flu_hospitals_per_region |>
   filter(!(anio == 2024 & semana_estadistica == last(semana_estadistica)))
 
 
-ggplot(data = flu_hospitals_per_region, aes(x = semana_estadistica, y = casos, group = factor(anio), color = factor(anio))) +
+ggplot(data = flu_hospitals_per_region, aes(x = semana_estadistica, y = casos, color = factor(anio))) +
   geom_line(linewidth = 0.6) +
   scale_x_continuous(breaks = seq(min(flu_hospitals_per_region$semana_estadistica), max(flu_hospitals_per_region$semana_estadistica), by = 5)) +
   scale_color_manual(values = c(rep("#ced4da", times = length(unique(flu_hospitals_per_region$anio)) - 1), "#ff006e")) +
@@ -107,7 +107,7 @@ max_2023 <- flu_hospitals |>
   slice(which.max(casos))
 
 
-ggplot(data = flu_hospitals, aes(x = semana_estadistica, y = casos, group = factor(anio), color = factor(anio))) +
+ggplot(data = flu_hospitals, aes(x = semana_estadistica, y = casos, color = factor(anio))) +
   geom_line(linewidth = 0.8) +
   geom_text(data = last_2024, aes(label = casos), vjust = 0, hjust = -0.2, size = 3.5) +
   geom_text(data = max_2023, aes(label = casos), vjust = 0, hjust = -0.2, size = 3.5) +
