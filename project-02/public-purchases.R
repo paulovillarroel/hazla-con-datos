@@ -51,7 +51,10 @@ miss_var_summary(direct_contact)
 miss_case_summary(direct_contact) |> View()
 
 direct_contact |> 
-  filter(row_number() == 84031) #slice
+  filter(row_number() == 84031) |> View() #slice
+
+direct_contact |> 
+  filter(row_number() %in% c(84549, 84549, 87648, 87649, 89640)) |> View()
 
 direct_contact |> 
   slice(84549, 84549, 87648, 87649, 89640) |> View()
@@ -61,6 +64,12 @@ direct_contact |>
 
 direct_contact <- direct_contact |> 
   mutate(fecha_envio_oc = as.Date(fecha_envio_oc, format = "%d-%m-%Y"))
+
+# direct_contact |> 
+#   separate(fecha_envio_oc, into = c("fecha", "hora"), sep = " ") |>
+#   mutate(fecha = as.Date(fecha, format = "%d-%m-%Y"),
+#          hora = lubridate::hms(hora)) |> View()
+  
 
 direct_contact |>
   group_by(mes = month(fecha_envio_oc)) |>
@@ -75,8 +84,17 @@ direct_contact |>
 format(sum(direct_contact$monto_neto_item_clp), scientific = FALSE)
 
 direct_contact |> 
-  group_by(month(fecha_envio_oc)) |>
-  summarise(total = sum(monto_neto_item_clp))
+  group_by(mes = month(fecha_envio_oc)) |>
+  summarise(n = n(),
+            total = sum(monto_neto_item_clp),
+            prom_oc = total / n )
+
+direct_contact |> 
+  group_by(region_unidad_compra,
+           mes = month(fecha_envio_oc)) |>
+  summarise(n = n(),
+            total = sum(monto_neto_item_clp),
+            prom_oc = total / n ) |> View()
 
 
 direct_contact |> 
@@ -91,6 +109,7 @@ direct_contact |>
   arrange(desc(total)) |>
   top_n(20) |> 
   ggplot(aes(x = fct_reorder(rubro_n1, total), y = total)) +
+  #ggplot(aes(rubro_n1, total)) +
   geom_col() +
   coord_flip() +
   scale_y_continuous(labels = scales::comma)
