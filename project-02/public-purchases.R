@@ -188,3 +188,85 @@ top_suppliers |>
   arrange(desc(n)) |> 
   View()
  
+
+# Medidas de tendencia central
+
+direct_contact |> 
+  summarise(media = mean(monto_neto_item_clp),
+            mediana = median(monto_neto_item_clp),
+            min = min(monto_neto_item_clp),
+            max = max(monto_neto_item_clp),
+            sd = sd(monto_neto_item_clp)
+            )
+
+# Percentiles
+
+direct_contact |> 
+  summarise(q25 = quantile(monto_neto_item_clp, 0.25),
+            q50 = quantile(monto_neto_item_clp, 0.50),
+            q75 = quantile(monto_neto_item_clp, 0.75),
+            q90 = quantile(monto_neto_item_clp, 0.90),
+            q95 = quantile(monto_neto_item_clp, 0.95),
+            q99 = quantile(monto_neto_item_clp, 0.99)
+            )
+
+# Valores de Tukey
+
+direct_contact |> 
+  summarise(q1 = quantile(monto_neto_item_clp, 0.25),
+            q3 = quantile(monto_neto_item_clp, 0.75),
+            iqr = IQR(monto_neto_item_clp),
+            lim_inf = q1 - 1.5 * iqr,
+            lim_sup = q3 + 1.5 * iqr
+            )
+
+# Boxplot
+
+direct_contact |> 
+  group_by(mes = month(fecha_envio_oc)) |>
+  ggplot(aes(factor(mes), monto_neto_item_clp)) +
+  geom_boxplot(outliers = FALSE) +
+  scale_y_continuous(labels = scales::comma)
+
+# Identificar los ouliers
+
+outliers <- direct_contact |> 
+  group_by(mes = month(fecha_envio_oc)) |>
+  filter(monto_neto_item_clp > 3 * IQR(monto_neto_item_clp))
+
+direct_contact |> 
+  group_by(mes = month(fecha_envio_oc)) |>
+  filter(monto_neto_item_clp > 1.5 * IQR(monto_neto_item_clp)) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+direct_contact |> 
+  group_by(mes = month(fecha_envio_oc)) |>
+  mutate(outlier = monto_neto_item_clp > 1.5 * IQR(monto_neto_item_clp)) |> 
+  filter(outlier == TRUE) |> 
+  ggplot(aes(factor(mes), monto_neto_item_clp, color = factor(mes))) +
+  geom_jitter() +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal()
+
+
+# Curtosis
+
+library(e1071)
+
+direct_contact |> 
+  summarise(kurtosis = kurtosis(monto_neto_item_clp))
+
+ggplot(data = direct_contact, aes(x = log(monto_neto_item_clp))) +
+  geom_histogram(bins = 50)
+
+ggplot(data = direct_contact, aes(x = log(monto_neto_item_clp))) +
+  geom_density()
+
+
+
+# Skewness
+
+direct_contact |> 
+  summarise(skewness = skewness(monto_neto_item_clp))
+
