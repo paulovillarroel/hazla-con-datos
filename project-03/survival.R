@@ -1,12 +1,9 @@
 library(tidyverse)
 
-# "https://www.fonasa.cl/sites/fonasa/datos-abiertos/bases-grd"
+# https://www.fonasa.cl/sites/fonasa/datos-abiertos/bases-grd
 
 # Unzip file
 unzip("project-03/raw-data/GRD_PUBLICO_EXTERNO_2022.zip", exdir = "project-03/raw-data/")
-
-# Delete zip file
-file.remove("project-03/raw-data/GRD_PUBLICO_EXTERNO_2022.zip")
 
 # Save file into a variable
 grd_2022 <- read_delim("project-03/raw-data/GRD_PUBLICO_EXTERNO_2022.txt",
@@ -14,7 +11,11 @@ grd_2022 <- read_delim("project-03/raw-data/GRD_PUBLICO_EXTERNO_2022.txt",
                        locale = locale(encoding = "UTF-16LE")
 )
 
-saveRDS(grd_2022, "project-03/intermediate-data/grd_2022.rds")
+# Delete large files
+file.remove("project-03/raw-data/GRD_PUBLICO_EXTERNO_2022.zip")
+file.remove("project-03/raw-data/GRD_PUBLICO_EXTERNO_2022.txt")
+
+# saveRDS(grd_2022, "project-03/intermediate-data/grd_2022.rds")
 # readRDS("project-03/intermediate-data/grd_2022.rds")
 
 # Read ICE-10 codes
@@ -52,22 +53,23 @@ icd10_malignant_neoplasms <- c(
 malignant_neoplasms <- data_extended |>
   filter(
     tipo_actividad == "HOSPITALIZACIÓN",
-    str_detect(str_to_lower(categoria.x), paste(icd10_malignant_neoplasms, collapse = "|"))
+    str_detect(str_to_lower(categoria), paste(icd10_malignant_neoplasms, collapse = "|"))
   ) |>
   mutate(estancia = as.Date(fechaalta) - as.Date(fecha_ingreso)) |>
   select(cod_hospital, nombre_oficial, nivel_de_complejidad, nombre_dependencia_jerarquica_seremi_servicio_de_salud,
-         sexo, tipo_ingreso, diagnostico1, descripcion.x, categoria.x, ir_29301_severidad, usospabellon,
+         sexo, tipo_ingreso, diagnostico1, descripcion, categoria, ir_29301_severidad, usospabellon,
          ir_29301_peso ,estancia, tipoalta) |> 
   rename(
     hospital = nombre_oficial,
     diagnostico = diagnostico1,
-    descripcion = descripcion.x,
-    categoria = categoria.x,
+    descripcion = descripcion,
+    categoria = categoria,
     servicio_salud = nombre_dependencia_jerarquica_seremi_servicio_de_salud,
     peso_grd = ir_29301_peso,
     severidad = ir_29301_severidad
   ) |> 
   mutate(servicio_salud = str_remove(servicio_salud, "Servicio de Salud "))
+
 
 malignant_neoplasms |> 
   group_by(categoria) |> 
