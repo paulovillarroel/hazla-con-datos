@@ -109,8 +109,6 @@ malignant_neoplasms_deceased$peso_grd_intervalo <- cut(malignant_neoplasms_decea
                                                        right = FALSE)
 
 
-
-
 # Survival analysis for malignant neoplasms using Kaplan-Meier
 library(survival)
 library(survminer)
@@ -119,7 +117,9 @@ library(survminer)
 fit <- survfit(Surv(estancia, status) ~ 1, data = malignant_neoplasms_deceased)
 
 summary(fit)
-broom::tidy(fit) |> View()
+fit_tidy <- broom::tidy(fit)
+
+writexl::write_xlsx(fit_tidy, "project-03/clean-data/survival_malignant_neoplasms_fit1.xlsx")
 
 # Basic survival curves
 ggsurvplot(fit, data = malignant_neoplasms_deceased, surv.median.line = "hv")
