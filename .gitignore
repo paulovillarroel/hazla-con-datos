@@ -2,8 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
-/raw-data
-/project-01/raw-data
-/project-02/raw-data
-/project-03/raw-data
-/project-03/intermediate-data
+/raw-data/*
+/project-01/raw-data/*
+/project-02/raw-data/*
+/project-03/raw-data/*
+/project-03/intermediate-data/*
+/project-04/raw-data/*
