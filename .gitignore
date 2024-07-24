@@ -8,3 +8,5 @@
 /project-03/raw-data/*
 /project-03/intermediate-data/*
 /project-04/raw-data/*
+.vscode/settings.json
+project-05/dashboard.pbix
