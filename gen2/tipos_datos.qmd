@@ -1,0 +1,60 @@
+---
+title: "Tipos y estructuras de datos"
+subtitle: "Curso Ciencia de Datos"
+theme:
+  light: flatly
+  dark: darkly
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-title: "Contenidos"
+    code-fold: true
+    code-tools: true
+    code-block-background: true
+---
+
+# Este es un título
+
+El lenguaje R es un lenguaje de programación de alto nivel y de código abierto, especialmente diseñado para el análisis estadístico y gráfico de datos. Fue creado en 1993 por Ross Ihaka y Robert Gentleman en la Universidad de Auckland, Nueva Zelanda.
+
+R se ha convertido en uno de los lenguajes de programación más populares en el campo de la estadística y el análisis de datos, ya que proporciona una gran cantidad de funciones y herramientas para analizar y visualizar datos de manera efectiva.
+
+Algunas de las características clave de R son:
+
+1.  **Análisis estadístico**: R proporciona una amplia variedad de funciones para realizar análisis estadísticos, como la estimación de parámetros, la prueba de hipótesis y la modelización de datos.
+2.  **Gráficos**: R ofrece una gran variedad de opciones para crear gráficos y visualizaciones de datos, lo que permite a los usuarios representar de manera efectiva sus resultados.
+3.  **Programación**: R es un lenguaje de programación completo que permite a los usuarios crear scripts y funciones personalizadas para realizar tareas específicas.
+4.  **Integración con bases de datos**: R se puede integrar con bases de datos como MySQL, PostgreSQL y SQLite, lo que permite a los usuarios analizar y visualizar datos almacenados en estas bases de datos.
+5.  **Extensibilidad**: R tiene una gran comunidad de usuarios y desarrolladores que crean paquetes y extensiones para agregar nuevas funcionalidades al lenguaje.
+
+Algunos de los usos más comunes de R son:
+
+1.  **Análisis de datos**: R se utiliza para analizar y visualizar datos en una variedad de campos, como la economía, la medicina, la biología y la física.
+2.  **Estadística**: R se utiliza para realizar análisis estadísticos y crear modelos estadísticos para predicciones y diagnósticos.
+3.  **Visualización de datos**: R se utiliza para crear gráficos y visualizaciones de datos para comunicar resultados y descubrimientos.
+4.  **Machine learning**: R se utiliza para crear modelos de aprendizaje automático y realizar análisis predictivos.
+
+R es un lenguaje de programación muy versátil y se puede utilizar en una variedad de plataformas, incluyendo Windows, macOS y Linux.
+
+Some of the most popular IDEs (Entornos de Desarrollo Integrado) para R son:
+
+1.  **RStudio**: Es uno de los IDEs más populares para R, ofrece una variedad de herramientas y funcionalidades para desarrollar y ejecutar scripts en R.
+2.  **Jupyter Notebook**: Es un IDE que permite a los usuarios crear y ejecutar notebooks en R, lo que facilita la colaboración y la visualización de resultados.
+3.  **Spyder**: Es un IDE que ofrece una variedad de herramientas y funcionalidades para desarrollar y ejecutar scripts en R.
+
+```{r}
+1 + 1
+```
+
+## Este es un subtítulo
+
+```{r}
+print(1 + 1)
+```
+
+Es es un gráfico simple
+
+```{r}
+plot(iris)
+```
