@@ -3,6 +3,12 @@ library(arrow)
 
 data <- arrow::read_parquet("https://datos.gob.cl/dataset/606ef5bb-11d1-475b-b69f-b980da5757f4/resource/ae6c9887-106d-4e98-8875-40bf2b836041/download/at_urg_respiratorio_semanal.parquet")
 
+# data2 <- read_parquet("gen2/raw-data/at_urg_respiratorio_semanal.parquet")
+
+# Identificar la semana epidemiológica con lubridate
+df <- data.frame(fecha = c("2024-11-12", "2022-02-26", "2024-08-11"))
+df <- df |> 
+  mutate(sem_epi = epiweek(fecha))
 
 # Parte 1 ----
 
