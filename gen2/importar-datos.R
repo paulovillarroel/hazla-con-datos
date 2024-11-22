@@ -8,8 +8,7 @@ library(readxl)
 # Cheat sheet Readr https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf
 # No confundir read_csv con read.csv / Son de librerías distintas. read_csv es de readr()
 
-
-read_csv(file.choose()) # Solo para casos muy especiales
+df <- read_csv(file.choose()) # Solo para casos muy especiales
 
 covid_cases <- read_csv("example-data/casos_covid.csv") # Atencion a la codificación
 covid_cases <- read_csv("example-data/casos_covid.csv", locale = locale(encoding = "latin1")) # UTF-8
@@ -35,7 +34,7 @@ read_csv("example-data/casos_covid_sin_header.csv",
            "Casos_conf")
          )
 
-# Install.packages("data.table")
+# install.packages("data.table")
 library(data.table)
 
 data.table::fread("example-data/casos_covid.csv", encoding = "Latin-1") |> 
@@ -71,7 +70,7 @@ cancer |>
 # Usando la ruta del archivo. Puedes ayudarte de la función getwd()
 getwd()
 read_xlsx("C:/Users/pvill/OneDrive/Proyectos-R/hazla-con-datos/gen2/example-data/poblacion_comunas.xlsx") |> 
-  View()
+  View() # No recomendado!!!
 
 population <- read_xlsx("example-data/poblacion_comunas.xlsx")
 
@@ -81,20 +80,30 @@ rio::import("example-data/poblacion_comunas.xlsx")
 
 
 # Muchas veces se incluyen títulos o logos en los excel
-population2 <- read_excel("example-data/poblacion_comunas2.xlsx", skip = 6)
+population2 <- read_excel("example-data/poblacion_comunas2.xlsx")
 
 # Cuidado con celdas con NA´s
 tail(population2, 2) # Filas con NA´s
+population2 |> 
+  head(-2) |> 
+  View()
+
 head(population2, -2) |> View()
 
-population2[1:362, 1:3]
+population2[1:362, 1:3] |> View()
+
+pop3 <- population2[-c(1:6), 3:5]
+
+colnames(pop3) <- c("Region", "Comuna", "Habitantes")
 
 population2 |>
-  janitor::remove_empty("cols")
+  janitor::remove_empty("cols") |> 
+  View()
 
 population2 |>
   head(-2) |> 
-  janitor::remove_empty("cols")
+  janitor::remove_empty("cols") |> 
+  View()
 
 population3 <- read_excel("example-data/poblacion_comunas2.xlsx", range = "D7:F369")
 
