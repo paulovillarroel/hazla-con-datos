@@ -9,8 +9,11 @@ data <- data |>
 casos_neumonia_anio <- data |> 
   filter(tipo_establecimiento == "Hospital",
          causa == "Neumonía (J12-J18)") |>
-  summarise(total_casos = sum(num_total), 
-            .by = anio)
+  group_by(anio) |> 
+  summarise(total_casos = sum(num_total)) |> 
+  ungroup()
+  # summarise(total_casos = sum(num_total), 
+  #           .by = anio)
 
 casos_neumonia_anio |> 
   ggplot(aes(anio, total_casos)) +
@@ -19,22 +22,22 @@ casos_neumonia_anio |>
 
 data |> 
   filter(tipo_establecimiento == "Hospital",
-         causa == "Neumonía (J12-J18)",
-         anio == 2024) |> 
+         causa == "Neumonía (J12-J18)") |> 
   pivot_longer(
     cols = matches("num"),
     names_to = "edad_grupo",
     values_to = "casos"
   ) |>
   summarise(total_casos = sum(casos),
-            .by = c(edad_grupo, semana_estadistica)) |> 
-  filter(edad_grupo != "num_total") |> 
+            .by = c(anio, edad_grupo, semana_estadistica)) |> 
+  filter(edad_grupo == "num5a14anios") |>
   ggplot(aes(semana_estadistica, total_casos, color = edad_grupo)) +
   geom_line() +
-  scale_color_brewer(palette = "Set1")
+  scale_color_brewer(palette = "Set1") +
+  facet_wrap( ~ anio)
 
 
-data |> 
+data_longer <- data |> 
   filter(tipo_establecimiento == "Hospital",
          causa == "Neumonía (J12-J18)",
          anio == 2024) |> 
@@ -49,12 +52,18 @@ data |>
             porc_65 = (mas_65 / total_casos) * 100,
             .by = c(region_glosa, semana_estadistica))
 
+data_longer |> # rafactoring
+  filter(edad_grupo == "num65o_mas") |>
+  summarise(mas_65 = sum(casos),
+            .by = c(region_glosa, semana_estadistica)) |>
+
 
 data |> 
   filter(tipo_establecimiento == "Hospital",
           causa == "Neumonía (J12-J18)",
           anio == 2024) |> 
-  summarise(casos_65 = sum(num65o_mas), .by = semana_estadistica) |> 
+  summarise(casos_65 = sum(num65o_mas), 
+            .by = semana_estadistica) |> 
   ggplot(aes(semana_estadistica, casos_65)) +
   geom_line()
 
@@ -63,7 +72,8 @@ data |>
   filter(tipo_establecimiento == "Hospital",
           causa == "Neumonía (J12-J18)",
           anio == 2024) |> 
-  summarise(casos_65 = sum(num65o_mas), .by = c(establecimiento_glosa, semana_estadistica)) |>
+  summarise(casos_65 = sum(num65o_mas), 
+            .by = c(establecimiento_glosa, semana_estadistica)) |>
   ggplot(aes(casos_65)) +
   geom_density()
 
@@ -71,7 +81,7 @@ data |>
 data |> 
   filter(tipo_establecimiento == "Hospital",
          causa == "Neumonía (J12-J18)",
-        anio == 2024) |> 
+         anio == 2024) |> 
 summarise(promedio = mean(num65o_mas),
           mediana = median(num65o_mas),
           p80 = quantile(num65o_mas, probs = 0.8),
