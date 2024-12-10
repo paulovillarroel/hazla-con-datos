@@ -1,7 +1,46 @@
 library(tidyverse)
 library(arrow)
 
-data <- arrow::read_parquet("https://datos.gob.cl/dataset/606ef5bb-11d1-475b-b69f-b980da5757f4/resource/ae6c9887-106d-4e98-8875-40bf2b836041/download/at_urg_respiratorio_semanal.parquet")
+# Opción 1
+url <- "https://datos.gob.cl/dataset/606ef5bb-11d1-475b-b69f-b980da5757f4/resource/ae6c9887-106d-4e98-8875-40bf2b836041/download/at_urg_respiratorio_semanal.parquet"
+
+destfile <- tempfile(fileext = ".parquet") # Archivo temporal
+download.file(url, destfile, mode = "wb") # Descarga el archivo
+
+data <- read_parquet(destfile)
+
+
+# Opción 2
+# install.packages("httr")
+library(httr)
+
+download_parquet <- function(url, max_attempts = 5) {
+  temp_file <- tempfile(fileext = ".parquet")
+  
+  for (i in 1:max_attempts) {
+    message(sprintf("Intento %d de %d", i, max_attempts))
+    
+    tryCatch({
+      response <- GET(url, write_disk(temp_file, overwrite = TRUE))
+      
+      if (status_code(response) == 200) {
+        message("Descarga exitosa")
+        return(read_parquet(temp_file))
+      }
+    }, error = function(e) {
+      if (i == max_attempts) stop("Error en la descarga después de ", max_attempts, " intentos")
+      Sys.sleep(2)
+    })
+  }
+}
+
+# Uso
+url <- "https://datos.gob.cl/dataset/606ef5bb-11d1-475b-b69f-b980da5757f4/resource/ae6c9887-106d-4e98-8875-40bf2b836041/download/at_urg_respiratorio_semanal.parquet"
+
+data <- download_parquet(url)
+
+
+# Exploración de datos
 
 data <- data |> 
   janitor::clean_names()
@@ -55,7 +94,7 @@ data_longer <- data |>
 data_longer |> # rafactoring
   filter(edad_grupo == "num65o_mas") |>
   summarise(mas_65 = sum(casos),
-            .by = c(region_glosa, semana_estadistica)) |>
+            .by = c(region_glosa, semana_estadistica))
 
 
 data |> 
